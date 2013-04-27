@@ -37,6 +37,10 @@ get '/trip/:id/suggestions' do
   Trip.find(params[:id]).places.to_json
 end
 
+get '/trip/:id/test' do
+  haml :test, locals: {places: Trip.find(params[:id]).places}
+end
+
 class Trip
   attr_accessor :city, :coords
 
@@ -71,7 +75,7 @@ class Trip
 
   PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}"
 
-  def places(limit=5)
+  def places(limit=30)
     places_wikiloc(limit).map do |place|
       place['photos'] = photos(place)
       place
@@ -80,19 +84,19 @@ class Trip
 
   def photos(place)
     photos = flickr.photos.search(sort: 'interestingness-desc',
+                                  text: place['title'],
                                   lat: place['lat'],
                                   lon: place['lng'],
                                   per_page: 10,
-                                  radius: 0.1)
+                                  radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_b(photo)
+      FlickRaw.url_s(photo)
     end
   end
 
   def places_wikiloc(limit)
     lat, lng = coords.split(',')
-    puts coords
     response = HTTParty.get(PLACES_URL % {lat: lat, lng: lng, limit: limit},
                             format: :json)
     #require 'pry'; binding.pry
