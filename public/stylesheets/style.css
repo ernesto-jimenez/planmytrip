@@ -40,7 +40,6 @@ body {
 
 article {
 	display: block;
-	border: 1px solid black;
 }
 
 	#wrapper article {
@@ -66,6 +65,7 @@ article {
 			height: auto;
 			top: 0;
 			left: 0;
+			z-index: 0;
 		}
 
 		#search_form {
@@ -76,10 +76,15 @@ article {
 			transform: translate(-50%, -50%);
 			-moz-transform: translate(-50%, -50%);
 			-webkit-transform: translate(-50%, -50%);
+			z-index: 1;
 		}
 
 			#search_form h1, #search_form input {
 				font-size: 3rem;
+			}
+
+			#q.error {
+				background: rgba(255, 0, 0, 0.3);
 			}
 
 			

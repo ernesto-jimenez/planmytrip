@@ -4,6 +4,8 @@
 		<meta charset="utf8">
 		<title>plan my trip</title>
 		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" />
+
+		<script type="text/javascript" src="/javascripts/lib/q.js"></script>
 		<script type="text/javascript" src="/javascripts/app.js"></script>
 		<script type="text/javascript">
 			window.onload = function() {
@@ -16,10 +18,10 @@
 		<div id="wrapper">
 			<article id="page_index">
 				<img src="/stylesheets/8420082569_b68e8bde6f_c.jpg" alt="" />
-				<div id="search_form">
+				<form id="search_form" action="">
 					<h1>I want to go to</h1>
-					<input type="text" id="q" placeholder="London" />
-				</div>
+					<input type="text" id="q" placeholder="London" autocomplete="off" />
+				</form>
 			</article>
 			<article id="page_results" class="hidden">
 				// search results
