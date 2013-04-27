@@ -74,26 +74,39 @@ class Trip
     response.show
   end
 
-  PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=20000"
+  #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
+  PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=london&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
-  def places(limit=30)
-    places_wikiloc(limit).map do |place|
+  def places(limit=5)
+    places_4sq(limit).map do |place|
       place['photos'] = photos(place)
       place
     end
   end
 
   def photos(place)
-    photos = flickr.photos.search(sort: 'interestingness-desc',
-                                  text: place['title'],
-                                  lat: place['lat'],
-                                  lon: place['lng'],
-                                  per_page: 10,
+    photos = flickr.photos.search(sort: 'relevance',
+                                  text: city+' '+(place['name'] || place['title']),
+                                  min_taken_date: '2012-01-01',
+                                  #lat: place['lat'],
+                                  # lon: place['lng'],
+                                  privacy_filter: 1,
+                                  accuracy: 11,
+                                  content_type: 1,
+                                  per_page: 5,
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_s(photo)
+      FlickRaw.url_m(photo)
     end
+  end
+
+  def places_4sq(limit)
+    lat, lng = coords.split(',')
+    response = HTTParty.get(PLACES_URL % {lat: lat, lng: lng, limit: limit},
+                            format: :json)
+    #require 'pry'; binding.pry
+    response['response']['venues']
   end
 
   def places_wikiloc(limit)
