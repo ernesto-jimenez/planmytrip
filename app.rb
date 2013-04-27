@@ -38,7 +38,8 @@ get '/trip/:id/suggestions' do
 end
 
 get '/trip/:id/test' do
-  haml :test, locals: {places: Trip.find(params[:id]).places}
+  city = params[:id].gsub(/_/, ' ')
+  haml :test, locals: {places: Trip.new(city).places}
 end
 
 class Trip
@@ -73,7 +74,7 @@ class Trip
     response.show
   end
 
-  PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}"
+  PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=20000"
 
   def places(limit=30)
     places_wikiloc(limit).map do |place|
