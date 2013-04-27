@@ -30,6 +30,7 @@ html, body {
 body {
 	background: #fff;
 	color: #222;
+	font-size: 60.5%;
 }
 
 #wrapper {
@@ -57,7 +58,7 @@ article {
 	}
 
 	#page_index {
-		
+		overflow: hidden;
 	}
 		#page_index > img {
 			position: absolute;
@@ -68,6 +69,17 @@ article {
 		}
 
 		#search_form {
-			padding: 0 40%;
-			position: relative;
+			display: block;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			-moz-transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
 		}
+
+			#search_form h1, #search_form input {
+				font-size: 3rem;
+			}
+
+			
