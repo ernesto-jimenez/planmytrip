@@ -75,7 +75,7 @@ class Trip
   end
 
   #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
-  PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=london&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
+  PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=5032792091d4c4b30a586d5c,4deefb944765f83613cdba6e,4bf58dd8d48988d181941735,4bf58dd8d48988d1e5931735,4bf58dd8d48988d184941735,4bf58dd8d48988d182941735,4bf58dd8d48988d1e2941735,50aaa49e4b90af0d42d5de11,50aaa4314b90af0d42d5de10,4bf58dd8d48988d161941735,4bf58dd8d48988d15d941735,4eb1d4dd4b900d56c88a45fd,4bf58dd8d48988d126941735&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
   def places(limit=5)
     places_4sq(limit).map do |place|
@@ -86,10 +86,14 @@ class Trip
 
   def photos(place)
     photos = flickr.photos.search(sort: 'relevance',
-                                  text: city+' '+(place['name'] || place['title']),
-                                  min_taken_date: '2012-01-01',
-                                  #lat: place['lat'],
-                                  # lon: place['lng'],
+                                  text: [
+                                    city,
+                                    (place['name'] || place['title'])
+                                  ].join(' '),
+                                  #tag: city,
+                                  min_taken_date: '2001-01-01',
+                                  #lat: place['lat'] || place['location']['lat'],
+                                  #lon: place['lng'] || place['location']['lng'],
                                   privacy_filter: 1,
                                   accuracy: 11,
                                   content_type: 1,
@@ -103,7 +107,8 @@ class Trip
 
   def places_4sq(limit)
     lat, lng = coords.split(',')
-    response = HTTParty.get(PLACES_URL % {lat: lat, lng: lng, limit: limit},
+    response = HTTParty.get(PLACES_URL % {lat: lat, lng: lng, limit: limit,
+                                          city: URI.escape(city)},
                             format: :json)
     #require 'pry'; binding.pry
     response['response']['venues']
