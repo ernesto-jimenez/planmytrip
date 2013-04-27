@@ -102,7 +102,7 @@ class Trip
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_m(photo)
+      FlickRaw.url_b(photo)
     end
   end
 
