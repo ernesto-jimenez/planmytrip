@@ -3,15 +3,26 @@ GEM
   specs:
     backports (3.3.0)
     chunky_png (1.2.8)
+    coderay (1.0.9)
     compass (0.11.7)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
+    flickraw (0.9.6)
     fssm (0.2.10)
     grid-coordinates (1.1.9)
       compass (>= 0.11.5)
     haml (3.1.8)
-    json_pure (1.7.7)
+    httparty (0.11.0)
+      multi_json (~> 1.0)
+      multi_xml (>= 0.5.2)
+    method_source (0.8.1)
+    multi_json (1.7.2)
+    multi_xml (0.5.3)
+    pry (0.9.12)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     rack (1.4.5)
     rake (10.0.4)
     sass (3.1.21)
@@ -21,7 +32,9 @@ GEM
       backports
       rack (~> 1.1, < 1.5)
       tilt (>= 1.2.2, < 2.0)
+    slop (3.4.4)
     tilt (1.3.7)
+    yql (0.0.2)
     yql-query (1.1.1)
 
 PLATFORMS
@@ -29,11 +42,14 @@ PLATFORMS
 
 DEPENDENCIES
   compass (~> 0.11.6)
+  flickraw
   grid-coordinates (~> 1.1.4)
   haml (~> 3.1.4)
-  json_pure
+  httparty
+  pry
   rake
   sass (~> 3.1.12)
   shotgun (~> 0.9)
   sinatra (~> 1.2.3)
+  yql
   yql-query
