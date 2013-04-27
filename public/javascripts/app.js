@@ -18,7 +18,10 @@ var PlanMyTripApp = function() {
 		resultText = document.querySelector('#page_results .text'),
 		resultLandmark = document.querySelector('#page_results h1'),
 		resultCity = document.querySelector('#page_results h2'),
-		resultDescription = document.querySelector('#page_results .description')
+		resultDescription = document.querySelector('#page_results .description'),
+		// Map
+		itineraryMap = document.querySelector('#page_map .map'),
+		itineraryList = document.querySelector('#page_map .itinerary')
 		;
 	
 	this.start = function() {
@@ -61,6 +64,8 @@ var PlanMyTripApp = function() {
 		buttonNo.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'no');
 		}, false);
+
+		//showMap();
 	};
 
 	function createNewTrip(tripLocation) {
@@ -135,7 +140,17 @@ var PlanMyTripApp = function() {
 	}
 
 	function showMap() {
+		// First map with all landmarks
+		// On click show landmark + restaurant + cafe
 		showPage('map');
+
+		var mapOptions = {
+			zoom: 8,
+			center: new google.maps.LatLng(-34.397, 150.644),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		},
+		map = new google.maps.Map(itineraryMap, mapOptions);
+
 	}
 
 	function showPage(name) {
