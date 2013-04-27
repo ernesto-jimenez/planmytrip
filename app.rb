@@ -143,7 +143,7 @@ class Trip
   end
 
   def redis
-    @redis ||= ENV['REDISCLOUD_URL'] ? Redis.new(ENV['REDISCLOUD_URL']) : Redis.new
+    @redis ||= ENV['REDISCLOUD_URL'] ? Redis.new(url: ENV['REDISCLOUD_URL']) : Redis.new
   end
 end
 
