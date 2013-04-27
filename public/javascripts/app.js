@@ -34,7 +34,7 @@ var PlanMyTripApp = function() {
 
 		// TODO POST /trip/location, get response == trip id
 		// ajax(domain + '/trip/' + inputSearch.value)
-		console.log('TODO: create trip for', tripLocation);
+		console.log('TODO: create trip id for', tripLocation);
 		deferred.resolve('randomid');
 
 		return deferred.promise;
@@ -44,12 +44,12 @@ var PlanMyTripApp = function() {
 		///trip/id/suggestions
 		var deferred = Q.defer();
 
-		ajax(domain + id + '/suggestions').then(function(txt) {
+		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
 			try {
-				var results = JSON.decode(txt);
+				var results = JSON.parse(txt);
 				deferred.resolve(results);
 			} catch(e) {
-				deferred.reject();
+				deferred.reject(e);
 			}
 		});
 
