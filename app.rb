@@ -6,6 +6,7 @@ require 'yql-query'
 require 'yql'
 require 'httparty'
 require 'flickraw'
+require 'redis'
 
 FlickRaw.api_key='10957f5c6f100b5aec74635e49dae68b'
 FlickRaw.shared_secret='107d21827e012cd3'
@@ -78,10 +79,12 @@ class Trip
   PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
   def places(limit=5)
-    places_4sq(limit).map do |place|
-      place['photos'] = photos(place)
-      place['title'] = place['name']
-      place
+    redis.cache(city) do
+      places_4sq(limit).map do |place|
+        place['photos'] = photos(place)
+        place['title'] = place['name']
+        place
+      end
     end
   end
 
@@ -102,7 +105,7 @@ class Trip
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_b(photo)
+      FlickRaw.url_c(photo)
     end
   end
 
@@ -110,7 +113,7 @@ class Trip
     lat, lng = coords.split(',')
     response = HTTParty.get(PLACES_URL % {lat: lat, lng: lng, limit: limit,
                                           city: URI.escape(city)},
-                            format: :json)
+    format: :json)
     #require 'pry'; binding.pry
     response['response']['venues']
   end
@@ -137,6 +140,24 @@ class Trip
     c =JSON.parse(response.show)['query']['results']['place'].first['centroid']
 
     return "#{c['latitude']},#{c['longitude']}"
+  end
+
+  def redis
+    @redis ||= ENV['REDISCLOUD_URL'] ? Redis.new(ENV['REDISCLOUD_URL']) : Redis.new
+  end
+end
+
+class Redis
+  def cache(key, expire=nil)
+    key = key.downcase.gsub(/[^a-z0-9]/, '-')
+    if (value = get(key)).nil?
+      value = yield(self)
+      set(key, value.to_json)
+      expire(key, expire) if expire
+      value
+    else
+      JSON.parse(value)
+    end
   end
 end
 
