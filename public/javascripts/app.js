@@ -3,6 +3,7 @@ var PlanMyTripApp = function() {
 
 	var domain = '/', //'http://mytrip.herokuapp.com/',
 		currentSearchLocation,
+		currentResult = null,
 		searchResults = [],
 		// UI
 		// Search
@@ -17,7 +18,7 @@ var PlanMyTripApp = function() {
 		resultCity = document.querySelector('#page_results h2'),
 		resultDescription = document.querySelector('#page_results .description')
 		;
-	console.log(resultLandmark, resultCity, resultDescription);
+	
 	this.start = function() {
 
 		inputForm.addEventListener('submit', function(e) {
@@ -47,6 +48,17 @@ var PlanMyTripApp = function() {
 			inputSearch.classList.remove('error');
 		}, false);
 
+		buttonYes.addEventListener('click', function() {
+			saveResultAndShowNext(currentResult, 'yes');
+		}, false);
+
+		buttonMaybe.addEventListener('click', function() {
+			saveResultAndShowNext(currentResult, 'maybe');
+		}, false);
+
+		buttonNo.addEventListener('click', function() {
+			saveResultAndShowNext(currentResult, 'no');
+		}, false);
 	};
 
 	function createNewTrip(tripLocation) {
@@ -86,10 +98,17 @@ var PlanMyTripApp = function() {
 	}
 
 	function showResult(result) {
+		currentResult = result;
 		resultImage.src = result.photos[0];
 		resultLandmark.innerHTML = result.title;
 		resultCity.innerHTML = currentSearchLocation;
-		resultDescription.innerHTML = 'Donde esta la descripcion?';
+		resultDescription.innerHTML = '???';
+	}
+
+	function saveResultAndShowNext(result, rating) {
+		// TODO actually save it
+		console.log('saveResultAndShowNext', rating);
+		showNextResult();
 	}
 
 	function showMap() {

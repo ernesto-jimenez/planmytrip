@@ -54,6 +54,7 @@ article {
 
 	.hidden {
 		opacity: 0;
+		display: none;
 	}
 
 	#page_index {
@@ -110,7 +111,7 @@ article {
 				display: inline;
 			}
 
-		#page_results .description {
+		#page_results > div {
 			position: absolute;
 			left: 0;
 			bottom: 0;
@@ -118,6 +119,7 @@ article {
 			text-shadow: 1px 1px 1px black;
 			background: rgba(0, 0, 0, 0.4);
 			padding: 1rem;
+			width: 100%;
 		}
 			#page_results h1 {
 				font-size: 2rem;
