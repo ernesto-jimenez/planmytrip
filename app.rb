@@ -80,6 +80,7 @@ class Trip
   def places(limit=5)
     places_4sq(limit).map do |place|
       place['photos'] = photos(place)
+      place['title'] = place['name']
       place
     end
   end
