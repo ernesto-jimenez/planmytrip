@@ -10,7 +10,10 @@ var PlanMyTripApp = function() {
 		inputForm.addEventListener('submit', function(e) {
 			e.preventDefault();
 
-			createNewTrip()
+			var tripLocation = inputSearch.value || inputSearch.placeholder;
+			inputSearch.value = tripLocation;
+
+			createNewTrip(tripLocation)
 				.then(getSuggestions)
 				.then(showSearchResults)
 				.fail(function() {
@@ -26,12 +29,12 @@ var PlanMyTripApp = function() {
 
 	};
 
-	function createNewTrip() {
+	function createNewTrip(tripLocation) {
 		var deferred = Q.defer();
 
 		// TODO POST /trip/location, get response == trip id
 		// ajax(domain + '/trip/' + inputSearch.value)
-
+		console.log('TODO: create trip for', tripLocation);
 		deferred.resolve('randomid');
 
 		return deferred.promise;
@@ -77,7 +80,7 @@ var PlanMyTripApp = function() {
 					var data = httpRequest.responseText;
 					deferred.resolve(data);
 				} else {
-					deferred.reject();
+					deferred.reject(httpRequest.status);
 				}
 			}
 		};
