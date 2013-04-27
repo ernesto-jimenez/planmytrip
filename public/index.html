@@ -5,11 +5,21 @@
 		<title>plan my trip</title>
 		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" />
 		<script type="text/javascript" src="/javascripts/app.js"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				var app = new PlanMyTripApp();
+				app.start();
+			}
+		</script>
 	</head>
 	<body>
 		<div id="wrapper">
 			<article id="page_index">
-				// search	
+				<img src="/stylesheets/8420082569_b68e8bde6f_c.jpg" />
+				<div id="search_form">
+					<h1>I want to go to</h1>
+					<input type="text" id="q" placeholder="London" />
+				</div>
 			</article>
 			<article id="page_results" class="hidden">
 				// search results
