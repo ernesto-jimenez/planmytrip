@@ -8,6 +8,7 @@ var PlanMyTripApp = function() {
 		tripId,
 		// UI
 		// Search
+		searchBg = document.querySelector('#page_index img'),
 		inputForm = document.getElementById('search_form'),
 		inputSearch = document.getElementById('q'),
 		// Results
@@ -65,6 +66,12 @@ var PlanMyTripApp = function() {
 			saveResultAndShowNext(currentResult, 'no');
 		}, false);
 
+		window.addEventListener('resize', function() {
+			resizeBackgroundImages();
+		});
+
+		setTimeout(resizeBackgroundImages, 5);
+
 		//showMap();
 	};
 
@@ -117,6 +124,8 @@ var PlanMyTripApp = function() {
 		resultCity.innerHTML = currentSearchLocation;
 		resultDescription.innerHTML = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>';
 
+		// TODO Resize image to fit in screen
+		// TODO image slide show
 		
 		// Hide the description by 'scrolling' it a little bit down
 		setTimeout(function() {
@@ -140,10 +149,13 @@ var PlanMyTripApp = function() {
 	}
 
 	function showMap() {
+		// TODO get trip landmarks from server, then show map
+
 		// First map with all landmarks
 		// On click show landmark + restaurant + cafe
 		showPage('map');
 
+		// TODO calculate average lat/lng and use to center map
 		var mapOptions = {
 			zoom: 8,
 			center: new google.maps.LatLng(-34.397, 150.644),
@@ -165,6 +177,35 @@ var PlanMyTripApp = function() {
 				el.classList.add('hidden');
 			}
 		}
+	}
+
+	function resizeBackgroundImages() {
+		var w = window.innerWidth,
+			h = window.innerHeight;
+
+		var image = searchBg,
+			imageStyle = image.style,
+			imageWidth = image.naturalWidth,
+			imageHeight = image.naturalHeight;
+
+		if(imageWidth === 0 || imageHeight === 0) {
+			return;
+		}
+
+		var tmpW = w,
+			tmpH = w * imageHeight / imageWidth;
+
+		if(tmpH < h) {
+			tmpH = h;
+			tmpW = h * imageWidth / imageHeight;
+		}
+
+		imageStyle.width = tmpW + 'px';
+		imageStyle.height = tmpH + 'px';
+
+		imageStyle.left = (Math.floor(w - tmpW) / 2) + 'px';
+		imageStyle.top = (Math.floor(h - tmpH) / 2) + 'px';
+
 	}
 
 	// utilities ... should probably be in another file! //
