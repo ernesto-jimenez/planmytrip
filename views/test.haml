@@ -1,7 +1,7 @@
 - places.each do |place|
-  %h2= place['title']
+  %h2= place['name']
 
-  %p= "#{place['lat']} - #{place['lng']}"
+  %p= "#{place['location']['lat']} - #{place['location']['lng']}"
 
   -place['photos'].each do |photo|
     %img{src: photo}
