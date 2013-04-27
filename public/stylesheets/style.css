@@ -88,3 +88,45 @@ article {
 			}
 
 			
+	#page_results {
+	}
+
+		#page_results > img {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: auto;
+		}
+
+		#page_results .buttons {
+			position: fixed;
+			top: 0;
+			right: 0;
+			list-style-position: inside;
+			list-style-type: none;
+		}
+			#page_results .buttons li {
+				display: inline;
+			}
+
+		#page_results .description {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			color: white;
+			text-shadow: 1px 1px 1px black;
+			background: rgba(0, 0, 0, 0.4);
+			padding: 1rem;
+		}
+			#page_results h1 {
+				font-size: 2rem;
+			}
+
+			#page_results h2 {
+				font-size: 1.5rem;
+			}
+
+			#page_results .description {
+				font-size: 1rem;
+			}

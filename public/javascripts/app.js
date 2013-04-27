@@ -2,9 +2,22 @@ var PlanMyTripApp = function() {
 	'use strict';
 
 	var domain = '/', //'http://mytrip.herokuapp.com/',
+		currentSearchLocation,
+		searchResults = [],
+		// UI
+		// Search
 		inputForm = document.getElementById('search_form'),
-		inputSearch = document.getElementById('q');
-	
+		inputSearch = document.getElementById('q'),
+		// Results
+		resultImage = document.querySelector('#page_results > img'),
+		buttonYes = document.querySelector('.buttons input[value=Yes]'),
+		buttonMaybe = document.querySelector('.buttons input[value=Maybe]'),
+		buttonNo = document.querySelector('.buttons input[value=No]'),
+		resultLandmark = document.querySelector('#page_results h1'),
+		resultCity = document.querySelector('#page_results h2'),
+		resultDescription = document.querySelector('#page_results .description')
+		;
+	console.log(resultLandmark, resultCity, resultDescription);
 	this.start = function() {
 
 		inputForm.addEventListener('submit', function(e) {
@@ -12,10 +25,17 @@ var PlanMyTripApp = function() {
 
 			var tripLocation = inputSearch.value || inputSearch.placeholder;
 			inputSearch.value = tripLocation;
+			currentSearchLocation = tripLocation;
 
 			createNewTrip(tripLocation)
 				.then(getSuggestions)
-				.then(showSearchResults)
+				.then(function(results) {
+					console.log("RESULTS!!!", results);
+					
+					showPage('results');
+					searchResults = results;
+					showNextResult();
+				})
 				.fail(function() {
 					inputSearch.classList.add('error');
 				});
@@ -41,7 +61,7 @@ var PlanMyTripApp = function() {
 	}
 
 	function getSuggestions(id) {
-		///trip/id/suggestions
+		// /trip/id/suggestions
 		var deferred = Q.defer();
 
 		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
@@ -56,8 +76,38 @@ var PlanMyTripApp = function() {
 		return deferred.promise;
 	}
 
-	function showSearchResults(results) {
-		console.log("RESULTS!!!", results);
+	function showNextResult() {
+		if(searchResults.length > 0) {
+			var result = searchResults.shift();
+			showResult(result);
+		} else {
+			showMap();
+		}
+	}
+
+	function showResult(result) {
+		resultImage.src = result.photos[0];
+		resultLandmark.innerHTML = result.title;
+		resultCity.innerHTML = currentSearchLocation;
+		resultDescription.innerHTML = 'Donde esta la descripcion?';
+	}
+
+	function showMap() {
+		showPage('map');
+	}
+
+	function showPage(name) {
+		var elementId = 'page_' + name,
+			elems = document.querySelectorAll('article');
+
+		for(var i = 0; i < elems.length; i++) {
+			var el = elems[i];
+			if(el.id === elementId) {
+				el.classList.remove('hidden');
+			} else {
+				el.classList.add('hidden');
+			}
+		}
 	}
 
 	// utilities ... should probably be in another file! //
