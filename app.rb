@@ -75,7 +75,7 @@ class Trip
   end
 
   #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
-  PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=5032792091d4c4b30a586d5c,4deefb944765f83613cdba6e,4bf58dd8d48988d181941735,4bf58dd8d48988d1e5931735,4bf58dd8d48988d184941735,4bf58dd8d48988d182941735,4bf58dd8d48988d1e2941735,50aaa49e4b90af0d42d5de11,50aaa4314b90af0d42d5de10,4bf58dd8d48988d161941735,4bf58dd8d48988d15d941735,4eb1d4dd4b900d56c88a45fd,4bf58dd8d48988d126941735&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
+  PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
   def places(limit=5)
     places_4sq(limit).map do |place|
@@ -102,7 +102,7 @@ class Trip
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_m(photo)
+      FlickRaw.url_b(photo)
     end
   end
 
