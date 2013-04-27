@@ -1,7 +1,7 @@
 var PlanMyTripApp = function() {
 	'use strict';
 
-	var domain = 'http://mytrip.herokuapp.com/',
+	var domain = '/', //'http://mytrip.herokuapp.com/',
 		inputForm = document.getElementById('search_form'),
 		inputSearch = document.getElementById('q');
 	
