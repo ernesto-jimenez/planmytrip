@@ -99,12 +99,14 @@ var PlanMyTripApp = function() {
 	};
 
 	function restoreButtonSrc(button) {
-		button.src = button.dataset['original-src'];
+		button.src = button.dataset['original_src'];
 	}
 
 	function createNewTrip(tripLocation) {
 
-		return ajax(domain + 'trip/' + inputSearch.value, {}, { method: 'post' });
+		return ajax(domain + 'trip', {
+			city: inputSearch.value
+		}, { method: 'post' });
 	}
 
 	function getSuggestions(id) {
