@@ -218,12 +218,14 @@ var PlanMyTripApp = function() {
 	}
 
 	function saveResultAndShowNext(result, rating) {
-		// TODO actually save it
+		
 		console.log('saveResultAndShowNext', rating);
-		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'}).then(function() {
-			})
-			.fail(function() {
-			});
+		if(result.id !== undefined) {
+			ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'}).then(function() {
+				})
+				.fail(function() {
+				});
+		}
 
 		if(rating !== 'no') {
 			numChosenResults++;
@@ -253,18 +255,23 @@ var PlanMyTripApp = function() {
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 
-				var map = new google.maps.Map(itineraryMap, mapOptions);
+				//var map = new google.maps.Map(itineraryMap, mapOptions);
 
 				//Draw markers
 				var results = JSON.parse(response),
-					list = document.createElement('ul');
+					list = document.createElement('ul'),
+					mapImg = document.createElement('img');
+
+				mapImg.src = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue|label:S|40.702147,-74.015794&markers=color:green|label:G|40.711614,-74.012318&markers=color:red|color:red|label:C|40.718217,-73.998284&sensor=false';
+
+				itineraryMap.appendChild(mapImg);
 
 				numChosenResults = 0;
 				results.forEach(function(res) {
 
-					var myLatlng = new google.maps.LatLng(res.location['lat'],res.location['lng']);
+					//var myLatlng = new google.maps.LatLng(res.location['lat'],res.location['lng']);
 
-					var marker = new google.maps.Marker({
+					/*var marker = new google.maps.Marker({
 					    position: myLatlng,
 					    title:"Hello World!"
 					});
@@ -277,7 +284,7 @@ var PlanMyTripApp = function() {
   						infowindow.open(map,marker);
 					});
 
-					marker.setMap(map);
+					marker.setMap(map);*/
 
 					var li = renderLandmarkList(res);
 					list.appendChild(li);
