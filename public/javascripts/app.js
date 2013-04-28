@@ -76,14 +76,17 @@ var PlanMyTripApp = function() {
 
 		buttonYes.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'yes');
+			restoreButtonSrc(buttonYes);
 		}, false);
 
 		buttonMaybe.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'maybe');
+			restoreButtonSrc(buttonMaybe);
 		}, false);
 
 		buttonNo.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'no');
+			restoreButtonSrc(buttonNo);
 		}, false);
 
 		window.addEventListener('resize', function() {
@@ -94,6 +97,10 @@ var PlanMyTripApp = function() {
 
 		//showMap();
 	};
+
+	function restoreButtonSrc(button) {
+		button.src = button.dataset['original-src'];
+	}
 
 	function createNewTrip(tripLocation) {
 
