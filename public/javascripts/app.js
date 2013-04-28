@@ -8,6 +8,7 @@ var PlanMyTripApp = function() {
 		tripId,
 		// UI
 		// Search
+		searchBg = document.querySelector('#page_index img'),
 		inputForm = document.getElementById('search_form'),
 		inputSearch = document.getElementById('q'),
 		// Results
@@ -18,7 +19,10 @@ var PlanMyTripApp = function() {
 		resultText = document.querySelector('#page_results .text'),
 		resultLandmark = document.querySelector('#page_results h1'),
 		resultCity = document.querySelector('#page_results h2'),
-		resultDescription = document.querySelector('#page_results .description')
+		resultDescription = document.querySelector('#page_results .description'),
+		// Map
+		itineraryMap = document.querySelector('#page_map .map'),
+		itineraryList = document.querySelector('#page_map .itinerary')
 		;
 
 	this.start = function() {
@@ -48,6 +52,11 @@ var PlanMyTripApp = function() {
 
 		inputSearch.addEventListener('keypress', function() {
 			inputSearch.classList.remove('error');
+			// TODO change bg image as soon as location is detected
+		}, false);
+
+		resultImage.addEventListener('load', function() {
+			fitImage(resultImage, window.innerWidth, window.innerHeight);
 		}, false);
 
 		buttonYes.addEventListener('click', function() {
@@ -61,6 +70,14 @@ var PlanMyTripApp = function() {
 		buttonNo.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'no');
 		}, false);
+
+		window.addEventListener('resize', function() {
+			resizeBackgroundImages();
+		});
+
+		setTimeout(resizeBackgroundImages, 5);
+
+		//showMap();
 	};
 
 	function createNewTrip(tripLocation) {
@@ -82,7 +99,9 @@ var PlanMyTripApp = function() {
 		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
 			try {
 				var results = JSON.parse(txt);
-				// TODO preload images
+				results.forEach(function(res) {
+					res.photos.forEach(preloadImage);
+				});
 				deferred.resolve(results);
 			} catch(e) {
 				deferred.reject(e);
@@ -112,6 +131,7 @@ var PlanMyTripApp = function() {
 		resultCity.innerHTML = currentSearchLocation;
 		resultDescription.innerHTML = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>';
 
+		// TODO image slide show
 
 		// Hide the description by 'scrolling' it a little bit down
 		setTimeout(function() {
@@ -135,7 +155,20 @@ var PlanMyTripApp = function() {
 	}
 
 	function showMap() {
+		// TODO get trip landmarks from server, then show map
+
+		// First map with all landmarks
+		// On click show landmark + restaurant + cafe
 		showPage('map');
+
+		// TODO calculate average lat/lng and use to center map
+		var mapOptions = {
+			zoom: 8,
+			center: new google.maps.LatLng(-34.397, 150.644),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		},
+		map = new google.maps.Map(itineraryMap, mapOptions);
+
 	}
 
 	function showPage(name) {
@@ -149,6 +182,57 @@ var PlanMyTripApp = function() {
 			} else {
 				el.classList.add('hidden');
 			}
+		}
+	}
+
+	function resizeBackgroundImages() {
+		var w = window.innerWidth,
+			h = window.innerHeight,
+			images = [ searchBg, resultImage ];
+
+		images.forEach(function(image) {
+			if(image !== null) {
+				fitImage(image, w, h);
+			}
+		});
+
+	}
+
+	function fitImage(image, w, h) {
+		var imageStyle = image.style,
+			imageWidth = image.naturalWidth,
+			imageHeight = image.naturalHeight;
+
+		if(imageWidth === 0 || imageHeight === 0) {
+			return;
+		}
+
+		var tmpW = w,
+			tmpH = w * imageHeight / imageWidth;
+
+		if(tmpH < h) {
+			tmpH = h;
+			tmpW = h * imageWidth / imageHeight;
+		}
+
+		imageStyle.width = tmpW + 'px';
+		imageStyle.height = tmpH + 'px';
+
+		imageStyle.left = (Math.floor(w - tmpW) / 2) + 'px';
+		imageStyle.top = (Math.floor(h - tmpH) / 2) + 'px';
+
+	}
+
+	function preloadImage(url) {
+		var img = document.createElement('img');
+		img.addEventListener('load', removeImage, false);
+		img.addEventListener('error', removeImage, false);
+		img.style.display = 'none';
+		document.body.appendChild(img);
+		img.src = url;
+
+		function removeImage() {
+			img.parentNode.removeChild(img);
 		}
 	}
 

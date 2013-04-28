@@ -127,8 +127,44 @@ article {
 
 			#page_results h2 {
 				font-size: 1.5rem;
+				padding-bottom: 0.25rem;
 			}
 
 			#page_results .description {
 				font-size: 1rem;
 			}
+	
+	#page_map {
+
+	}
+		#page_map .mapContainer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 40%;
+			width: 100%;
+			z-index: 1;
+		}
+			#page_map .map {
+				height: 100%;
+			}
+
+		#page_map .itinerary {
+			position: absolute;
+			top: 40%;
+			height: 100%;
+			padding: 1%;
+		}
+			#page_map h1 {
+				font-size: 2rem;
+			}
+
+			#page_map h2 {
+				font-size: 1.5rem;
+				padding-bottom: 0.25rem;
+			}
+			
+			.itinerary ul {
+				list-style-type: none;
+			}
+

@@ -5,6 +5,8 @@
 		<title>plan my trip</title>
 		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" />
 
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
 		<script type="text/javascript" src="/javascripts/lib/q.js"></script>
 		<script type="text/javascript" src="/javascripts/app.js"></script>
 		<script type="text/javascript">
@@ -39,7 +41,21 @@
 				</div>
 			</article>
 			<article id="page_map" class="hidden">
-				// mapa
+				<div class="mapContainer">
+					<div class="map">[ Mapa con los tres puntos ]</div>
+				</div>
+				<div class="itinerary">
+					<h1>Your itinerary</h1>
+					<ul>
+						<li>
+							<ul>
+								<li>Point</li>
+								<li>Restaurante</li>
+								<li>Cafe</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
 			</article>
 		</div>
 	</body>
