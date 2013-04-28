@@ -111,12 +111,19 @@ class Trip
   #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
   PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
+  KEYS = %{id title location photos url}
+
   def places(limit=5)
     redis.cache(city) do
       places_4sq(limit).map do |place|
         place['photos'] = photos(place)
         place['title'] = place['name']
+        place['url'] = place['canonicalUrl']
         redis.set("place:#{place['id']}", place.to_json)
+        place.delete_if do |key, value|
+          !KEYS.include?(key)
+        end
+        puts place.inspect
         place
       end
     end
