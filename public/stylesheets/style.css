@@ -119,9 +119,11 @@ article {
 			right: 0;
 			list-style-position: inside;
 			list-style-type: none;
+			padding: 0.5rem 0;
 		}
 			#page_results .buttons li {
 				display: inline;
+				padding: 0 0.3rem;
 			}
 				#page_results .buttons input {
 					width: 40px;
