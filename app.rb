@@ -176,7 +176,7 @@ class Trip
     c = place['title'].split(' ').map(&:capitalize).join(' ')
     response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(c)},format: :json)
 
-    require 'pry'; binding.pry
+    #require 'pry'; binding.pry
 
     response['query']['pages'].values[0]['extract'] || ""
   end
