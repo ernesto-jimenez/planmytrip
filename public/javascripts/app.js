@@ -157,7 +157,7 @@ var PlanMyTripApp = function() {
 			clearTimeout(slideShowTimeout);
 		}
 
-		
+
 		resultsText.style.visibility = 'hidden';
 		resultsText.style.opacity = 0;
 
@@ -204,7 +204,7 @@ var PlanMyTripApp = function() {
 			return slideShowTimeout;
 		}
 
-		
+
 		setTimeout(function() {
 			imgElem.style.opacity = 1;
 			clearTimeout(slideShowTimeout);
@@ -275,7 +275,7 @@ var PlanMyTripApp = function() {
 					});
 
 					marker.setMap(map);
-				});			
+				});
 			});
 	}
 
@@ -334,21 +334,9 @@ var PlanMyTripApp = function() {
 	// Function for adding a marker to the page.
     function addLocation(lat,lng) {
 
-<<<<<<< HEAD
 
 
 	}
-
-
-=======
-    	place = new google.maps.LatLng(lat, lng);
-        marker = new google.maps.Marker({
-            position: place,
-            title: 'Yohoo!'
-        });
-        marker.setMap(map);
-    }
->>>>>>> Added markers to map
 
 	function resizeBackgroundImages() {
 		var w = window.innerWidth,
