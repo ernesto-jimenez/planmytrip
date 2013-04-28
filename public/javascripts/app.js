@@ -156,37 +156,15 @@ var PlanMyTripApp = function() {
 			clearTimeout(slideShowTimeout);
 		}
 
-		/*slideShowTimeout =*/ 
 		
-		// positionResultsText();
-		//
 		resultsText.style.visibility = 'hidden';
 		resultsText.style.opacity = 0;
 
 		startSlideShow(resultImage, result.photos, function() {
-			/*setTimeout(function() {
-				var textHeight = resultText.clientHeight,
-					descriptionPos = resultDescription.offsetTop;
-
-				resultsPage.style.height = (resultsPage.clientHeight + textHeight) + 'px';
-
-				window.scrollTo(0, descriptionPos + 4);
-			}, 10);*/
-			
 			setTimeout(positionResultsText, 15);
 
 		});
 
-		// Hide the description by 'scrolling' it a little bit down
-		/*setTimeout(function() {
-			var textHeight = resultText.clientHeight,
-				descriptionPos = resultDescription.offsetTop;
-
-			resultsPage.style.height = (resultsPage.clientHeight + textHeight) + 'px';
-
-			window.scrollTo(0, descriptionPos + 4);
-
-		}, 5);*/
 	}
 
 	function positionResultsText() {
@@ -219,14 +197,17 @@ var PlanMyTripApp = function() {
 				imgElem.style.opacity = 1;
 			}, 250);
 
+			clearTimeout(slideShowTimeout);
 			slideShowTimeout = setTimeout(nextPhoto, timeoutLength);
 			currentIndex = ++currentIndex % photos.length;
 			return slideShowTimeout;
 		}
 
+		
 		setTimeout(function() {
 			imgElem.style.opacity = 1;
-			setTimeout(nextPhoto, timeoutLength);
+			clearTimeout(slideShowTimeout);
+			slideShowTimeout = setTimeout(nextPhoto, timeoutLength);
 			onStartCb();
 		}, 5);
 
