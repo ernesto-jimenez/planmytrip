@@ -13,9 +13,9 @@ var PlanMyTripApp = function() {
 		inputSearch = document.getElementById('q'),
 		// Results
 		resultImage = document.querySelector('#page_results > img'),
-		buttonYes = document.querySelector('.buttons input[value=Yes]'),
-		buttonMaybe = document.querySelector('.buttons input[value=Maybe]'),
-		buttonNo = document.querySelector('.buttons input[value=No]'),
+		buttonYes = document.querySelector('.buttons input[data-value=Yes]'),
+		buttonMaybe = document.querySelector('.buttons input[data-value=Maybe]'),
+		buttonNo = document.querySelector('.buttons input[data-value=No]'),
 		resultText = document.querySelector('#page_results .text'),
 		resultLandmark = document.querySelector('#page_results h1'),
 		resultCity = document.querySelector('#page_results h2'),

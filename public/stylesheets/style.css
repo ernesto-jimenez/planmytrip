@@ -110,6 +110,10 @@ article {
 			#page_results .buttons li {
 				display: inline;
 			}
+				#page_results .buttons input {
+					width: 40px;
+					height: 40px;
+				}
 
 		#page_results > div {
 			position: absolute;
