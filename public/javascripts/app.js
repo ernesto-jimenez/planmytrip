@@ -141,7 +141,8 @@ var PlanMyTripApp = function() {
 	}
 
 	function showResult(result) {
-		var resultsPage = document.getElementById('page_results');
+		var resultsPage = document.getElementById('page_results'),
+			resultsText = document.querySelector('#page_results .text');
 
 		resultsPage.style.height = 'auto';
 
@@ -155,10 +156,29 @@ var PlanMyTripApp = function() {
 			clearTimeout(slideShowTimeout);
 		}
 
-		slideShowTimeout = startSlideShow(resultImage, result.photos);
+		/*slideShowTimeout =*/ 
+		
+		// positionResultsText();
+		//
+		resultsText.style.visibility = 'hidden';
+		resultsText.style.opacity = 0;
+
+		startSlideShow(resultImage, result.photos, function() {
+			/*setTimeout(function() {
+				var textHeight = resultText.clientHeight,
+					descriptionPos = resultDescription.offsetTop;
+
+				resultsPage.style.height = (resultsPage.clientHeight + textHeight) + 'px';
+
+				window.scrollTo(0, descriptionPos + 4);
+			}, 10);*/
+			
+			setTimeout(positionResultsText, 15);
+
+		});
 
 		// Hide the description by 'scrolling' it a little bit down
-		setTimeout(function() {
+		/*setTimeout(function() {
 			var textHeight = resultText.clientHeight,
 				descriptionPos = resultDescription.offsetTop;
 
@@ -166,14 +186,29 @@ var PlanMyTripApp = function() {
 
 			window.scrollTo(0, descriptionPos + 4);
 
-		}, 5);
+		}, 5);*/
+	}
+
+	function positionResultsText() {
+		var resultsPage = document.getElementById('page_results'),
+			resultsText = document.querySelector('#page_results .text');
+
+		var textHeight = resultText.clientHeight,
+			descriptionPos = resultDescription.offsetTop;
+
+		resultsPage.style.height = (resultsPage.clientHeight + textHeight) + 'px';
+		resultsText.style.visibility = 'visible';
+		resultsText.style.opacity = 1;
+		window.scrollTo(0, descriptionPos + 4);
+
 	}
 
 
-	function startSlideShow(imgElem, photos) {
+	function startSlideShow(imgElem, photos, onStartCb) {
 		var currentIndex = photos.indexOf(imgElem.src),
 			timeoutLength = 5000;
 
+		imgElem.style.opacity = 0;
 		imgElem.src = photos[currentIndex];
 
 		function nextPhoto() {
@@ -189,7 +224,13 @@ var PlanMyTripApp = function() {
 			return slideShowTimeout;
 		}
 
-		return nextPhoto();
+		setTimeout(function() {
+			imgElem.style.opacity = 1;
+			setTimeout(nextPhoto, timeoutLength);
+			onStartCb();
+		}, 5);
+
+		//return nextPhoto();
 
 	}
 
