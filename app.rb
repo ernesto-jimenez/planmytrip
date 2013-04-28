@@ -55,8 +55,8 @@ post '/trip/:id/maybe/:pid' do
   redis.sadd("#{params[:id]}:maybe", redis.get("place:#{params[:pid]}"))
 end
 
-post '/trip/generateid' do
-  id = ('a'..'z').to_a.shuffle[0,8].join
+get '/trip/generateid' do
+  id = ('a'..'z').to_a.shuffle[0,16].join
   id
 end
 
