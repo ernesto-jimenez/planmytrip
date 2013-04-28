@@ -266,19 +266,21 @@ var PlanMyTripApp = function() {
 
 					var marker = new google.maps.Marker({
 					    position: myLatlng,
-					    title:"Hello World!"
+					    title: res.location['name']
 					});
 
 					var infowindow = new google.maps.InfoWindow({
-    					content: 'A place'
+    					content: '<div id="content">'+res.location['name']+'</div>'
 					});
+
+					marker.setMap(map);
 
 					google.maps.event.addListener(marker, 'click', function() {
   						infowindow.open(map,marker);
 					});
 
 					marker.setMap(map);
-
+					
 					var li = renderLandmarkList(res);
 					list.appendChild(li);
 				});
