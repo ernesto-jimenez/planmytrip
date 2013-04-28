@@ -99,7 +99,9 @@ var PlanMyTripApp = function() {
 		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
 			try {
 				var results = JSON.parse(txt);
-				// TODO preload images
+				results.forEach(function(res) {
+					res.photos.forEach(preloadImage);
+				});
 				deferred.resolve(results);
 			} catch(e) {
 				deferred.reject(e);
@@ -146,7 +148,7 @@ var PlanMyTripApp = function() {
 	function saveResultAndShowNext(result, rating) {
 		// TODO actually save it
 		console.log('saveResultAndShowNext', rating);
-		ajax(domain + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'})
+		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'})
 			.fail(function() {
 			});
 		showNextResult();
@@ -219,6 +221,19 @@ var PlanMyTripApp = function() {
 		imageStyle.left = (Math.floor(w - tmpW) / 2) + 'px';
 		imageStyle.top = (Math.floor(h - tmpH) / 2) + 'px';
 
+	}
+
+	function preloadImage(url) {
+		var img = document.createElement('img');
+		img.addEventListener('load', removeImage, false);
+		img.addEventListener('error', removeImage, false);
+		img.style.display = 'none';
+		document.body.appendChild(img);
+		img.src = url;
+
+		function removeImage() {
+			img.parentNode.removeChild(img);
+		}
 	}
 
 	// utilities ... should probably be in another file! //
