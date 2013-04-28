@@ -96,7 +96,9 @@ class Trip
   end
 
   def self.find(id)
-    Trip.new(id)
+    trip = Trip.new(id)
+    puts trip.city
+    trip
   end
 
   QUERY = 'ancestor_woeid in
@@ -173,7 +175,7 @@ class Trip
   def description(place)
     city = city.capitalize
     response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(city)},format: :json)
-    
+
     response['query']['pages'][0]['description'] || ""
   end
 
