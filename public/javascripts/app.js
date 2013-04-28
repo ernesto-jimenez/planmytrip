@@ -113,6 +113,8 @@ var PlanMyTripApp = function() {
 		// /trip/id/suggestions
 		var deferred = Q.defer();
 
+		tripId = id;
+
 		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
 			try {
 				var results = JSON.parse(txt);
