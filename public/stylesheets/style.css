@@ -38,7 +38,7 @@ body {
 	border:0px;
 	color: #fff;
 	cursor: pointer;
-	padding: 0px 20px;
+	padding: 0.1rem 2rem;
 }
 
 .main_button:hover{
@@ -95,6 +95,12 @@ article {
 			#search_form h1, #search_form input {
 				font-size: 3rem;
 				margin-bottom: 0.2rem;
+			}
+
+			#search_form h1, #search_form input[type=text] {
+				font-size: 3rem;
+				margin-bottom: 0.2rem;
+				width: 70%;
 			}
 
 			#q.error {
