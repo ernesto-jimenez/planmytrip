@@ -13,6 +13,7 @@ var PlanMyTripApp = function() {
 		searchBg = document.querySelector('#page_index img'),
 		inputForm = document.getElementById('search_form'),
 		inputSearch = document.getElementById('q'),
+		inputGo = document.querySelector('#page_index input[type=submit]'),
 		// Results
 		resultImage = document.querySelector('#page_results > img'),
 		buttonYes = document.querySelector('.buttons img[data-value=Yes]'),
@@ -32,6 +33,8 @@ var PlanMyTripApp = function() {
 		inputForm.addEventListener('submit', function(e) {
 			e.preventDefault();
 
+			inputGo.disabled = 'disabled';
+
 			var tripLocation = inputSearch.value || inputSearch.placeholder;
 			inputSearch.value = tripLocation;
 			currentSearchLocation = tripLocation;
@@ -41,9 +44,8 @@ var PlanMyTripApp = function() {
 				.then(function(results) {
 					console.log("RESULTS!!!", results);
 
-					showPage('results');
 					searchResults = results;
-					showNextResult();
+					showPage('results', showNextResult);
 				})
 				.fail(function() {
 					inputSearch.classList.add('error');
@@ -74,14 +76,17 @@ var PlanMyTripApp = function() {
 
 		buttonYes.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'yes');
+			restoreButtonSrc(buttonYes);
 		}, false);
 
 		buttonMaybe.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'maybe');
+			restoreButtonSrc(buttonMaybe);
 		}, false);
 
 		buttonNo.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'no');
+			restoreButtonSrc(buttonNo);
 		}, false);
 
 		window.addEventListener('resize', function() {
@@ -93,16 +98,13 @@ var PlanMyTripApp = function() {
 		//showMap();
 	};
 
+	function restoreButtonSrc(button) {
+		button.src = button.dataset['original-src'];
+	}
+
 	function createNewTrip(tripLocation) {
-		var deferred = Q.defer();
 
-		// TODO POST /trip/location, get response == trip id
-		// ajax(domain + '/trip/' + inputSearch.value)
-		console.log('TODO: create trip id for', tripLocation);
-		tripId = 'randomid';
-		deferred.resolve(tripId);
-
-		return deferred.promise;
+		return ajax(domain + 'trip/' + inputSearch.value, {}, { method: 'post' });
 	}
 
 	function getSuggestions(id) {
@@ -143,10 +145,8 @@ var PlanMyTripApp = function() {
 		resultImage.src = result.photos[0];
 		resultLandmark.innerHTML = result.title;
 		resultCity.innerHTML = currentSearchLocation;
-    resultDescription.innerHTML = result.description || "";
-		//resultDescription.innerHTML = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>';
-
-		// TODO image slide show
+		resultDescription.innerHTML = result.description || "";
+		
 		if(slideShowTimeout !== null) {
 			clearTimeout(slideShowTimeout);
 		}
@@ -168,10 +168,18 @@ var PlanMyTripApp = function() {
 
 	function startSlideShow(imgElem, photos) {
 		var currentIndex = photos.indexOf(imgElem.src),
-			timeoutLength = 8000;
+			timeoutLength = 5000;
+
+		imgElem.src = photos[currentIndex];
 
 		function nextPhoto() {
-			imgElem.src = photos[currentIndex];
+			imgElem.style.opacity = 0;
+			
+			setTimeout(function() {
+				imgElem.src = photos[currentIndex];
+				imgElem.style.opacity = 1;
+			}, 250);
+
 			slideShowTimeout = setTimeout(nextPhoto, timeoutLength);
 			currentIndex = ++currentIndex % photos.length;
 			return slideShowTimeout;
@@ -184,7 +192,8 @@ var PlanMyTripApp = function() {
 	function saveResultAndShowNext(result, rating) {
 		// TODO actually save it
 		console.log('saveResultAndShowNext', rating);
-		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'})
+		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'}).then(function() {
+			})
 			.fail(function() {
 			});
 
@@ -221,19 +230,63 @@ var PlanMyTripApp = function() {
 
 	}
 
-	function showPage(name) {
+	function showPage(name, visibleCallback) {
 		var elementId = 'page_' + name,
 			elems = document.querySelectorAll('article');
 
+		visibleCallback = visibleCallback || function() {};
+
+		// current page -> fade out
+		// next page -> fade in
+		var currentPage, nextPage;
+
 		for(var i = 0; i < elems.length; i++) {
+			
 			var el = elems[i];
+
 			if(el.id === elementId) {
-				el.classList.remove('hidden');
-			} else {
-				el.classList.add('hidden');
+				nextPage = el;
+			} else if(! el.classList.contains('hidden')) {
+				currentPage = el;
 			}
+			
 		}
+
+		currentPage.addEventListener('transitionend', onTransitionEnd, false);
+		currentPage.addEventListener('webkitTransitionEnd', onTransitionEnd, false);
+		currentPage.style.opacity = 0;
+
+		function onTransitionEnd() {
+			
+			currentPage.removeEventListener('transitionend', onTransitionEnd, false);
+			currentPage.removeEventListener('webkitTransitionEnd', onTransitionEnd, false);
+
+			currentPage.classList.add('hidden');
+
+			nextPage.addEventListener('transitionend', onNextTransitionEnd, false);
+			nextPage.addEventListener('webkitTransitionEnd', onNextTransitionEnd, false);
+
+			nextPage.style.display = 'block';
+			
+			setTimeout(function() {
+				nextPage.classList.remove('hidden');
+			}, 1);
+
+		}
+
+		function onNextTransitionEnd() {
+			nextPage.removeEventListener('transitionend', onNextTransitionEnd, false);
+			nextPage.removeEventListener('webkitTransitionEnd', onNextTransitionEnd, false);
+			visibleCallback();
+		}
+
+
+
+
+
 	}
+
+	
 
 	function resizeBackgroundImages() {
 		var w = window.innerWidth,
