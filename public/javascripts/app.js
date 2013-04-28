@@ -5,6 +5,7 @@ var PlanMyTripApp = function() {
 		currentSearchLocation,
 		currentResult = null,
 		searchResults = [],
+		numChosenResults = 0,
 		tripId,
 		slideShowTimeout = null,
 		// UI
@@ -100,6 +101,7 @@ var PlanMyTripApp = function() {
 		ajax(domain + 'trip/' + id + '/suggestions').then(function(txt) {
 			try {
 				var results = JSON.parse(txt);
+				numChosenResults = 0;
 				results.forEach(function(res) {
 					res.photos.forEach(preloadImage);
 				});
@@ -173,7 +175,16 @@ var PlanMyTripApp = function() {
 		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'})
 			.fail(function() {
 			});
-		showNextResult();
+
+		if(rating !== 'no') {
+			numChosenResults++;
+		}
+		
+		if(numChosenResults < 10) {
+			showNextResult();
+		} else {
+			showMap();
+		}
 	}
 
 	function showMap() {
