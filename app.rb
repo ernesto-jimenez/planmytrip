@@ -131,7 +131,7 @@ class Trip
       places_4sq(limit).map do |place|
         place['photos'] = photos(place)
         place['title'] = place['name']
-        place['description'] = 'The description'
+        place['description'] = description(place)
         place['url'] = place['canonicalUrl']
         redis.set("place:#{place['id']}", place.to_json)
         place.delete_if do |key, value|
@@ -173,10 +173,11 @@ class Trip
   end
 
   def description(place)
-    city = city.capitalize
-    response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(city)},format: :json)
+    c = place['title'].split(' ').map(&:capitalize).join(' ')
+    response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(c)},format: :json)
 
-    response['query']['pages'][0]['description'] || ""
+    #require 'pry'; binding.pry
+    response['query']['pages'].values[0]['description'] || ""
   end
 
   def places_wikiloc(limit)
