@@ -33,18 +33,6 @@ body {
 	font-size: 60.5%;
 }
 
-.main_button{
-	background: none repeat scroll 0 0 rgba(255,73,22,1);
-	border:0px;
-	color: #fff;
-	cursor: pointer;
-	padding: 0.1rem 2rem;
-}
-
-.main_button:hover{
-	background: none repeat scroll 0 0 rgba(255,43,11,1);
-}
-
 #wrapper {
 	position: relative;
 	height: 100%;
@@ -90,6 +78,7 @@ article {
 			-moz-transform: translate(-50%, -50%);
 			-webkit-transform: translate(-50%, -50%);
 			z-index: 1;
+			width: 50%;
 		}
 
 			#search_form h1, #search_form input {
@@ -97,15 +86,35 @@ article {
 				margin-bottom: 0.2rem;
 			}
 
-			#search_form h1, #search_form input[type=text] {
-				font-size: 3rem;
-				margin-bottom: 0.2rem;
+			#search_form .buttons {
+				display: table;
+			}
+				#search_form input {
+					display: table-cell;
+				}
+
+			#q {
+				border: none;
 				width: 70%;
+				padding: 0 0.2rem;
 			}
 
-			#q.error {
-				background: rgba(255, 0, 0, 0.3);
+				#q.error {
+					background: rgba(255, 0, 0, 0.3);
+				}
+			
+			#search_form input[type=submit] {
+				background: none repeat scroll 0 0 rgba(255,73,22,1);
+				border:none;
+				color: #fff;
+				cursor: pointer;
+				padding: 0px 20px;
 			}
+
+				#search_form input[type=submit]:hover{
+					background: none repeat scroll 0 0 rgba(255,43,11,1);
+				}
+
 
 			
 	#page_results {
