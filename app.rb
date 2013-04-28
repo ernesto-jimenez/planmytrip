@@ -55,21 +55,21 @@ post '/trip/:id/maybe/:pid' do
   redis.sadd("#{params[:id]}:maybe", redis.get("place:#{params[:pid]}"))
 end
 
-post '/trip/generateid' do
-  id = ('a'..'z').to_a.shuffle[0,8].join
+get '/trip/generateid' do
+  id = ('a'..'z').to_a.shuffle[0,16].join
   id
-end
-
-get '/trip/:id' do
-  haml :test, locals: {places: list(params[:id]).map { |p|
-    JSON.parse(p)
-  }}
 end
 
 get '/trip/:id.json' do
   "[" +
   list(params[:id]).join(',') +
   "]"
+end
+
+get '/trip/:id' do
+  haml :test, locals: {places: list(params[:id]).map { |p|
+    JSON.parse(p)
+  }}
 end
 
 def list(id)
@@ -139,7 +139,7 @@ class Trip
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_b(photo) 
+      FlickRaw.url_b(photo)
     end
   end
 
