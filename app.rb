@@ -157,7 +157,7 @@ class Trip
                                   privacy_filter: 1,
                                   accuracy: 11,
                                   content_type: 1,
-                                  per_page: 5,
+                                  per_page: 10,
                                   radius: 0.5)
 
     photos.map do |photo|

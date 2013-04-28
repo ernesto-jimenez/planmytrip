@@ -34,6 +34,7 @@ var PlanMyTripApp = function() {
 			e.preventDefault();
 
 			inputGo.disabled = 'disabled';
+      inputGo.value = "Loading…";
 
 			var tripLocation = inputSearch.value || inputSearch.placeholder;
 			inputSearch.value = tripLocation;
@@ -151,7 +152,7 @@ var PlanMyTripApp = function() {
 		resultLandmark.innerHTML = result.title;
 		resultCity.innerHTML = currentSearchLocation;
 		resultDescription.innerHTML = result.description || "";
-		
+
 		if(slideShowTimeout !== null) {
 			clearTimeout(slideShowTimeout);
 		}
@@ -191,7 +192,7 @@ var PlanMyTripApp = function() {
 
 		function nextPhoto() {
 			imgElem.style.opacity = 0;
-			
+
 			setTimeout(function() {
 				imgElem.src = photos[currentIndex];
 				imgElem.style.opacity = 1;
@@ -267,7 +268,7 @@ var PlanMyTripApp = function() {
 		var currentPage, nextPage;
 
 		for(var i = 0; i < elems.length; i++) {
-			
+
 			var el = elems[i];
 
 			if(el.id === elementId) {
@@ -275,7 +276,7 @@ var PlanMyTripApp = function() {
 			} else if(! el.classList.contains('hidden')) {
 				currentPage = el;
 			}
-			
+
 		}
 
 		currentPage.addEventListener('transitionend', onTransitionEnd, false);
@@ -283,7 +284,7 @@ var PlanMyTripApp = function() {
 		currentPage.style.opacity = 0;
 
 		function onTransitionEnd() {
-			
+
 			currentPage.removeEventListener('transitionend', onTransitionEnd, false);
 			currentPage.removeEventListener('webkitTransitionEnd', onTransitionEnd, false);
 
@@ -293,7 +294,7 @@ var PlanMyTripApp = function() {
 			nextPage.addEventListener('webkitTransitionEnd', onNextTransitionEnd, false);
 
 			nextPage.style.display = 'block';
-			
+
 			setTimeout(function() {
 				nextPage.classList.remove('hidden');
 			}, 1);
@@ -312,7 +313,7 @@ var PlanMyTripApp = function() {
 
 	}
 
-	
+
 
 	function resizeBackgroundImages() {
 		var w = window.innerWidth,
