@@ -224,15 +224,56 @@ var PlanMyTripApp = function() {
 		var elementId = 'page_' + name,
 			elems = document.querySelectorAll('article');
 
+		// current page -> fade out
+		// next page -> fade in
+		var currentPage, nextPage;
+
 		for(var i = 0; i < elems.length; i++) {
+			
 			var el = elems[i];
+
 			if(el.id === elementId) {
-				el.classList.remove('hidden');
-			} else {
-				el.classList.add('hidden');
+				nextPage = el;
+			} else if(! el.classList.contains('hidden')) {
+				currentPage = el;
 			}
+			
 		}
+
+		currentPage.addEventListener('transitionend', onTransitionEnd, false);
+		currentPage.addEventListener('webkitTransitionEnd', onTransitionEnd, false);
+		currentPage.style.opacity = 0;
+
+		function onTransitionEnd() {
+			
+			currentPage.removeEventListener('transitionend', onTransitionEnd, false);
+			currentPage.removeEventListener('webkitTransitionEnd', onTransitionEnd, false);
+
+			currentPage.classList.add('hidden');
+
+			nextPage.addEventListener('transitionend', onNextTransitionEnd, false);
+			nextPage.addEventListener('webkitTransitionEnd', onNextTransitionEnd, false);
+
+			nextPage.style.display = 'block';
+			
+			setTimeout(function() {
+				nextPage.classList.remove('hidden');
+			}, 1);
+
+		}
+
+		function onNextTransitionEnd() {
+			nextPage.removeEventListener('transitionend', onTransitionEnd, false);
+			nextPage.removeEventListener('webkitTransitionEnd', onTransitionEnd, false);
+		}
+
+
+
+
+
 	}
+
+	
 
 	function resizeBackgroundImages() {
 		var w = window.innerWidth,

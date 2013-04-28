@@ -50,6 +50,13 @@ article {
 		right: 0;
 		width: 100%;
 		height: 100%;
+
+		-webkit-transition-property: opacity;
+		-moz-transition-property: opacity;
+		transition-property: opacity;
+		-webkit-transition-duration: 1s;
+		-moz-transition-duration: 1s;
+		transition-duration: 1s;
 	}
 
 	.hidden {
