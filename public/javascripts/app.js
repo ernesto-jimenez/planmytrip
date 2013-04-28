@@ -104,7 +104,9 @@ var PlanMyTripApp = function() {
 
 	function createNewTrip(tripLocation) {
 
-		return ajax(domain + 'trip/' + inputSearch.value, {}, { method: 'post' });
+		return ajax(domain + 'trip', {
+			city: inputSearch.value
+		}, { method: 'post' });
 	}
 
 	function getSuggestions(id) {
