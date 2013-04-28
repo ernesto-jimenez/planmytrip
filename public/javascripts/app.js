@@ -255,7 +255,9 @@ var PlanMyTripApp = function() {
 				var map = new google.maps.Map(itineraryMap, mapOptions);
 
 				//Draw markers
-				var results = JSON.parse(response);
+				var results = JSON.parse(response),
+					list = document.createElement('ul');
+
 				numChosenResults = 0;
 				results.forEach(function(res) {
 
@@ -275,8 +277,38 @@ var PlanMyTripApp = function() {
 					});
 
 					marker.setMap(map);
+
+					var li = renderLandmarkList(res);
+					list.appendChild(li);
 				});
+
+				window.scrollTo(0, 0);
+				itineraryList.appendChild(list);
+
 			});
+	}
+
+	function renderLandmarkList(landmark) {
+
+		var li = document.createElement('li'),
+			address = landmark.location.address,
+			postCode = landmark.location.postalCode,
+			txt = '';
+
+		txt = '<h2>' + landmark.name + '</h2>' +
+						'<em>' + landmark.location.address ; 
+		
+		if(postCode !== undefined) {
+			txt += ', ' + landmark.location.postalCode;
+		}
+		
+		txt += '</em>';
+
+		li.innerHTML = txt;
+
+		return li;
+
+
 	}
 
 	function showPage(name, visibleCallback) {
