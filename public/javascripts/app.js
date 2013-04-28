@@ -24,6 +24,7 @@ var PlanMyTripApp = function() {
 		resultCity = document.querySelector('#page_results h2'),
 		resultDescription = document.querySelector('#page_results .description'),
 		// Map
+		itineraryMapContainer = document.querySelector('.mapContainer'),
 		itineraryMap = document.querySelector('#page_map .map'),
 		itineraryList = document.querySelector('#page_map .itinerary')
 		;
