@@ -7,6 +7,7 @@ require 'yql'
 require 'httparty'
 require 'flickraw'
 require 'redis'
+require 'securerandom'
 
 FlickRaw.api_key='10957f5c6f100b5aec74635e49dae68b'
 FlickRaw.shared_secret='107d21827e012cd3'
@@ -56,8 +57,7 @@ post '/trip/:id/maybe/:pid' do
 end
 
 get '/trip/generateid' do
-  id = ('a'..'z').to_a.shuffle[0,16].join
-  id
+  SecureRandom.hex(10)
 end
 
 get '/trip/:id.json' do
