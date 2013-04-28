@@ -129,7 +129,7 @@ class Trip
       places_4sq(limit).map do |place|
         place['photos'] = photos(place)
         place['title'] = place['name']
-        place['description'] = description(place)
+        place['description'] = 'The description'
         place['url'] = place['canonicalUrl']
         redis.set("place:#{place['id']}", place.to_json)
         place.delete_if do |key, value|
