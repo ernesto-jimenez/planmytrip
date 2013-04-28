@@ -260,9 +260,11 @@ var PlanMyTripApp = function() {
 				//Draw markers
 				var results = JSON.parse(response),
 					list = document.createElement('ul'),
-					mapImg = document.createElement('img');
+					mapImg = document.createElement('img'),
+					mapWidth = Math.round(window.innerWidth),
+					mapHeight = Math.round(window.innerHeight * 0.4);
 
-				mapImg.src = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue|label:S|40.702147,-74.015794&markers=color:green|label:G|40.711614,-74.012318&markers=color:red|color:red|label:C|40.718217,-73.998284&sensor=false';
+				mapImg.src = 'http://maps.googleapis.com/maps/api/staticmap?center=' + currentSearchLocation + 'zoom=13&size=' + mapWidth + 'x' + mapHeight + '&maptype=roadmap&markers=color:blue|label:S|40.702147,-74.015794&markers=color:green|label:G|40.711614,-74.012318&markers=color:red|color:red|label:C|40.718217,-73.998284&sensor=false';
 
 				itineraryMap.appendChild(mapImg);
 
