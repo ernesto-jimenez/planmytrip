@@ -28,7 +28,9 @@ get '/' do
 end
 
 post '/trip' do
-  Trip.create.id
+  m_city = params[:city]
+  trip = Trip.create(m_city)
+  trip.id
 end
 
 get '/trip/:id/edit' do
