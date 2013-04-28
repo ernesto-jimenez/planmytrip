@@ -17,6 +17,9 @@ gem 'yql-query'
 gem 'yql'
 gem 'httparty'
 gem 'flickraw'
+gem 'redis'
+gem 'unicorn'
+gem 'foreman', :group => :development
 
 gem 'pry', :group => :development
 
