@@ -125,7 +125,11 @@ article {
 				#search_form input[type=submit]:hover{
 					background: none repeat scroll 0 0 rgba(255,43,11,1);
 				}
-
+				
+				#search_form input[disabled] {
+					opacity: 0.8;
+					background: #999;
+				}
 
 			
 	#page_results {

@@ -13,6 +13,7 @@ var PlanMyTripApp = function() {
 		searchBg = document.querySelector('#page_index img'),
 		inputForm = document.getElementById('search_form'),
 		inputSearch = document.getElementById('q'),
+		inputGo = document.querySelector('#page_index input[type=submit]'),
 		// Results
 		resultImage = document.querySelector('#page_results > img'),
 		buttonYes = document.querySelector('.buttons img[data-value=Yes]'),
@@ -31,6 +32,8 @@ var PlanMyTripApp = function() {
 
 		inputForm.addEventListener('submit', function(e) {
 			e.preventDefault();
+
+			inputGo.disabled = 'disabled';
 
 			var tripLocation = inputSearch.value || inputSearch.placeholder;
 			inputSearch.value = tripLocation;
