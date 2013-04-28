@@ -239,7 +239,7 @@ var PlanMyTripApp = function() {
 
 		// TODO get trip landmarks from server, then show map
 		ajax(domain + 'trip/' + tripId + '.json')
-			.then(function() {
+			.then(function(response) {
 
 				// First map with all landmarks
 				// On click show landmark + restaurant + cafe
@@ -250,11 +250,33 @@ var PlanMyTripApp = function() {
 					zoom: 8,
 					center: new google.maps.LatLng(-34.397, 150.644),
 					mapTypeId: google.maps.MapTypeId.ROADMAP
-				},
-				map = new google.maps.Map(itineraryMap, mapOptions);
+				};
 
+				var map = new google.maps.Map(itineraryMap, mapOptions);
+
+				//Draw markers
+				var results = JSON.parse(response);
+				numChosenResults = 0;
+				results.forEach(function(res) {
+
+					var myLatlng = new google.maps.LatLng(res.location['lat'],res.location['lng']);
+
+					var marker = new google.maps.Marker({
+					    position: myLatlng,
+					    title:"Hello World!"
+					});
+
+					var infowindow = new google.maps.InfoWindow({
+    					content: 'A place'
+					});
+
+					google.maps.event.addListener(marker, 'click', function() {
+  						infowindow.open(map,marker);
+					});
+
+					marker.setMap(map);
+				});			
 			});
-
 	}
 
 	function showPage(name, visibleCallback) {
@@ -306,14 +328,27 @@ var PlanMyTripApp = function() {
 			nextPage.removeEventListener('webkitTransitionEnd', onNextTransitionEnd, false);
 			visibleCallback();
 		}
+	}
 
 
+	// Function for adding a marker to the page.
+    function addLocation(lat,lng) {
 
+<<<<<<< HEAD
 
 
 	}
 
 
+=======
+    	place = new google.maps.LatLng(lat, lng);
+        marker = new google.maps.Marker({
+            position: place,
+            title: 'Yohoo!'
+        });
+        marker.setMap(map);
+    }
+>>>>>>> Added markers to map
 
 	function resizeBackgroundImages() {
 		var w = window.innerWidth,
