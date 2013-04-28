@@ -43,6 +43,34 @@ get '/trip/:id/test' do
   haml :test, locals: {places: Trip.new(city).places}
 end
 
+post '/trip/:id/yes/:pid' do
+  redis.sadd("#{params[:id]}:yes", redis.get("place:#{params[:pid]}"))
+end
+
+post '/trip/:id/no/:pid' do
+  redis.sadd("#{params[:id]}:no", redis.get("place:#{params[:pid]}"))
+end
+
+post '/trip/:id/maybe/:pid' do
+  redis.sadd("#{params[:id]}:maybe", redis.get("place:#{params[:pid]}"))
+end
+
+get '/trip/:id' do
+  haml :test, locals: {places: list(params[:id]).map { |p|
+    JSON.parse(p)
+  }}
+end
+
+get '/trip/:id.json' do
+  "[" +
+  list(params[:id]).join(',') +
+  "]"
+end
+
+def list(id)
+  redis.sunion("#{id}:yes", "#{id}:maybe")
+end
+
 class Trip
   attr_accessor :city, :coords
 
@@ -83,6 +111,7 @@ class Trip
       places_4sq(limit).map do |place|
         place['photos'] = photos(place)
         place['title'] = place['name']
+        redis.set("place:#{place['id']}", place.to_json)
         place
       end
     end
@@ -141,10 +170,10 @@ class Trip
 
     return "#{c['latitude']},#{c['longitude']}"
   end
+end
 
-  def redis
-    @redis ||= ENV['REDISCLOUD_URL'] ? Redis.new(url: ENV['REDISCLOUD_URL']) : Redis.new
-  end
+def redis
+  @redis ||= ENV['REDISCLOUD_URL'] ? Redis.new(url: ENV['REDISCLOUD_URL']) : Redis.new
 end
 
 class Redis
