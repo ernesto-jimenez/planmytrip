@@ -43,7 +43,6 @@ var PlanMyTripApp = function() {
 
 					searchResults = results;
 					showPage('results', showNextResult);
-					//showNextResult();
 				})
 				.fail(function() {
 					inputSearch.classList.add('error');
