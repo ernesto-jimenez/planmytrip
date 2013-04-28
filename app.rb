@@ -77,14 +77,16 @@ class Trip
 
   def initialize(id = nil)
     self.id = id || SecureRandom.hex(10)
-    self.city = redis.get("trip:#{id}:city")
-    self.coords = redis.get("trip:#{id}:coords")
+    self.city = redis.get("trip:#{id}:city") || 'London'
+    self.coords = redis.get("trip:#{id}:coords") || Trip.fetch_coords(city)
+    self.save
   end
 
   def self.create(city)
     trip = Trip.new
     trip.city = city
     trip.coords = fetch_coords(city)
+    trip.save
     return trip
   end
 
