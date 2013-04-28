@@ -139,15 +139,21 @@ article {
 			list-style-position: inside;
 			list-style-type: none;
 			padding: 0.5rem 0;
+			z-index: 10;
 		}
 			#page_results .buttons li {
 				display: inline;
 				padding: 0 0.3rem;
 			}
-				#page_results .buttons input {
+				#page_results .buttons img {
 					width: 40px;
 					height: 40px;
+					pointer: cursor;
 				}
+
+				/*#page_results .buttons img:hover {
+					content: attr(data-hover, url);
+				}*/
 
 		#page_results > div {
 			position: absolute;

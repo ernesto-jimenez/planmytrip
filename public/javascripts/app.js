@@ -15,9 +15,9 @@ var PlanMyTripApp = function() {
 		inputSearch = document.getElementById('q'),
 		// Results
 		resultImage = document.querySelector('#page_results > img'),
-		buttonYes = document.querySelector('.buttons input[data-value=Yes]'),
-		buttonMaybe = document.querySelector('.buttons input[data-value=Maybe]'),
-		buttonNo = document.querySelector('.buttons input[data-value=No]'),
+		buttonYes = document.querySelector('.buttons img[data-value=Yes]'),
+		buttonMaybe = document.querySelector('.buttons img[data-value=Maybe]'),
+		buttonNo = document.querySelector('.buttons img[data-value=No]'),
 		resultText = document.querySelector('#page_results .text'),
 		resultLandmark = document.querySelector('#page_results h1'),
 		resultCity = document.querySelector('#page_results h2'),
@@ -60,6 +60,17 @@ var PlanMyTripApp = function() {
 		resultImage.addEventListener('load', function() {
 			fitImage(resultImage, window.innerWidth, window.innerHeight);
 		}, false);
+
+		[ buttonYes, buttonNo, buttonMaybe ].forEach(function(btn) {
+			btn.dataset['original_src'] = btn.src;
+			btn.addEventListener('mouseover', function() {
+				btn.src = btn.dataset['hover'];
+			}, false);
+
+			btn.addEventListener('mouseout', function() {
+				btn.src = btn.dataset['original_src'];
+			}, false);
+		});
 
 		buttonYes.addEventListener('click', function() {
 			saveResultAndShowNext(currentResult, 'yes');
