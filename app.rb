@@ -28,7 +28,7 @@ get '/' do
 end
 
 post '/trip' do
-  redirect to('/trip/whatever/edit')
+  Trip.create.id
 end
 
 get '/trip/:id/edit' do
@@ -41,7 +41,7 @@ end
 
 get '/trip/:id/test' do
   city = params[:id].gsub(/_/, ' ')
-  haml :test, locals: {places: Trip.new(city).places}
+  haml :test, locals: {places: Trip.create(city).places}
 end
 
 post '/trip/:id/yes/:pid' do
@@ -54,10 +54,6 @@ end
 
 post '/trip/:id/maybe/:pid' do
   redis.sadd("#{params[:id]}:maybe", redis.get("place:#{params[:pid]}"))
-end
-
-get '/trip/generateid' do
-  SecureRandom.hex(10)
 end
 
 get '/trip/:id.json' do
@@ -77,15 +73,28 @@ def list(id)
 end
 
 class Trip
-  attr_accessor :city, :coords
+  attr_accessor :city, :coords, :id
 
-  def initialize(city, coords=nil)
-    self.city = city
-    self.coords = coords || Trip.fetch_coords(city)
+  def initialize(id = nil)
+    self.id = id || SecureRandom.hex(10)
+    self.city = redis.get("trip:#{id}:city")
+    self.coords = redis.get("trip:#{id}:coords")
+  end
+
+  def self.create(city)
+    trip = Trip.new
+    trip.city = city
+    trip.coords = fetch_coords(city)
+    return trip
+  end
+
+  def save
+    redis.set("trip:#{id}:city", city)
+    redis.set("trip:#{id}:coords", coords)
   end
 
   def self.find(id)
-    return Trip.new('London')
+    Trip.new(id)
   end
 
   QUERY = 'ancestor_woeid in
@@ -111,12 +120,18 @@ class Trip
   #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
   PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
 
+  KEYS = %{id title location photos url}
+
   def places(limit=5)
     redis.cache(city) do
       places_4sq(limit).map do |place|
         place['photos'] = photos(place)
         place['title'] = place['name']
+        place['url'] = place['canonicalUrl']
         redis.set("place:#{place['id']}", place.to_json)
+        place.delete_if do |key, value|
+          !KEYS.include?(key)
+        end
         place
       end
     end
