@@ -86,6 +86,10 @@ article {
 				margin-bottom: 0.2rem;
 			}
 
+			#search_form h1 {
+				color: #fff;
+			}
+
 			#search_form .buttons {
 				display: table;
 			}
