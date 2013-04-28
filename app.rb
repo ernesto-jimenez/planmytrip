@@ -97,7 +97,7 @@ class Trip
 
   def self.find(id)
     trip = Trip.new(id)
-    puts trip.city
+    #puts trip.city
     trip
   end
 
@@ -159,7 +159,7 @@ class Trip
                                   radius: 0.5)
 
     photos.map do |photo|
-      FlickRaw.url_b(photo)
+      FlickRaw.url_z(photo)
     end
   end
 
@@ -176,8 +176,9 @@ class Trip
     c = place['title'].split(' ').map(&:capitalize).join(' ')
     response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(c)},format: :json)
 
-    #require 'pry'; binding.pry
-    response['query']['pages'].values[0]['description'] || ""
+    require 'pry'; binding.pry
+
+    response['query']['pages'].values[0]['extract'] || ""
   end
 
   def places_wikiloc(limit)
