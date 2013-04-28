@@ -123,7 +123,7 @@ class Trip
 
   #PLACES_URL = "http://api.wikilocation.org/articles?lat=%{lat}&lng=%{lng}&type=landmark&limit=%{limit}&radius=2000"
   PLACES_URL = "https://api.foursquare.com/v2/venues/search?near=%{city}&categoryId=4deefb944765f83613cdba6e&oauth_token=LNE0NIZDYMP2TYW3NOIML43A4THTIX44YZVPIWDF3PCTEWVU&v=20130427"
-  DESCRIPTION_URL = "http://en.wikipedia.org//w/api.php?action=query&prop=extracts&format=json&exlimit=10&exsentences=5&exintro=&exsectionformat=plain&titles=%{city}"
+  DESCRIPTION_URL = "http://en.wikipedia.org//w/api.php?action=query&prop=extracts&format=json&exlimit=10&exsentences=10&exsectionformat=plain&titles=%{city}"
   KEYS = %{id title location photos url description}
 
   def places(limit=5)
@@ -173,7 +173,8 @@ class Trip
   end
 
   def description(place)
-    c = place['title'].split(' ').map(&:capitalize).join(' ')
+    c = place['title'].split(' ').map(&:capitalize).join(' ').
+      sub(/^The/, '')
     response = HTTParty.get(DESCRIPTION_URL % {city: URI.escape(c)},format: :json)
 
     #require 'pry'; binding.pry
