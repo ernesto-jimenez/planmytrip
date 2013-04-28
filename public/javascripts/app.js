@@ -93,15 +93,8 @@ var PlanMyTripApp = function() {
 	};
 
 	function createNewTrip(tripLocation) {
-		var deferred = Q.defer();
 
-		// TODO POST /trip/location, get response == trip id
-		// ajax(domain + '/trip/' + inputSearch.value)
-		console.log('TODO: create trip id for', tripLocation);
-		tripId = 'randomid';
-		deferred.resolve(tripId);
-
-		return deferred.promise;
+		return ajax(domain + 'trip/' + inputSearch.value, {}, { method: 'post' });
 	}
 
 	function getSuggestions(id) {
@@ -189,7 +182,8 @@ var PlanMyTripApp = function() {
 	function saveResultAndShowNext(result, rating) {
 		// TODO actually save it
 		console.log('saveResultAndShowNext', rating);
-		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'})
+		ajax(domain + 'trip/' + tripId + '/' + rating + '/' + result.id, {}, {method: 'post'}).then(function() {
+			})
 			.fail(function() {
 			});
 
